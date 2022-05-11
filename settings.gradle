@@ -1,2 +1,5 @@
-rootProject.name = '5Laba'
+rootProject.name = 'My6Laba'
+include 'Client'
+include 'Server'
+include 'common'
 
