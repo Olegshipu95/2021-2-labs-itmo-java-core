@@ -21,7 +21,7 @@ import java.util.regex.PatternSyntaxException;
 public class JavaIO {
 
     public static boolean readScript(String filepath) {
-        Set keys = CommandCollection.getCommandColl().keySet();
+        Set keys = CommandCollection.getClientCommands().keySet();
 
         Scanner scanner;
         try {
@@ -49,7 +49,7 @@ public class JavaIO {
             if (CommandCollection.getClientCommands().containsKey(command)) {
 
 
-                result = (CommandCollection.getCommandColl().get(command)).function(arguments);
+                result = (CommandCollection.getClientCommands().get(command)).function(arguments);
 
                 for (int i = 0; i < result.getMessage().size(); i++) {
                     System.out.println(result.getMessage().get(i));

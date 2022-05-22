@@ -27,7 +27,6 @@ public class Connect extends CommandsToCollection {
         try {
             ConnectWithServer.getInstance().setIPAddressAndPort(InetAddress.getByName(args[0]), Integer.valueOf(args[1]));
             DataClients dataClients = new DataClients("connect", args);
-
             DataServer dataServer = ConnectWithServer.getInstance().connectWithServer(dataClients);
             for (CommandData commandData : dataServer.getCommandDataHashSet()) {
                 CommandCollection.getServerCommands().put(commandData.getName(), commandData);

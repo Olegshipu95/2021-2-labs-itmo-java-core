@@ -1,2 +1,0 @@
-10,namee,1.5,6,true,false,1.8,18,HAMMER,CALM,false
-12,nom,1.5,6,true,false,1.8,18,HAMMER,CALM,false

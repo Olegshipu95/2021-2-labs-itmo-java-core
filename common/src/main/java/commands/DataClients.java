@@ -12,10 +12,19 @@ public class DataClients implements Serializable {
     private final String command;
     @Getter
     private final String[] args;
+    @Getter
+    private final String usersName;
+
+    public DataClients(String command, String[] args, String usersName) {
+        this.command = command;
+        this.args = args;
+        this.usersName = usersName;
+    }
 
     public DataClients(String commandWithArgs, String[] args) {
         command = commandWithArgs;
         this.args = args;
+        usersName = null;
     }
 
 

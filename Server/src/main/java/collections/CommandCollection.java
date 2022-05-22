@@ -1,10 +1,13 @@
 package collections;
 
 import commands.AbstractCommand;
-import commands.CheckTheCorrect;
-import commands.Command;
+import commands.onlyServers.Connect;
+import commands.onlyServers.Login;
+import commands.onlyServers.Register;
+import commands.onlyServers.Save;
 import commands.system.*;
 import lombok.Getter;
+import lombok.extern.java.Log;
 
 import java.util.HashMap;
 
@@ -32,6 +35,8 @@ public class CommandCollection {
         new RemoveLower();
         new Save();
         new Show();
+        new Register();
+        new Login();
         new SumOfMinutesOfWaiting();
         new UpdateId();
     }

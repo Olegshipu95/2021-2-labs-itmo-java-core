@@ -67,6 +67,15 @@ public class ArgsValidator {
                     throw new IncorrectArgsException("You must write 1 argument with path");
                 }
                 break;
+            case LOGIN_ARGS:
+                if (!(args.length == 1 && args[0].isEmpty())) {
+                    throw new IncorrectArgsException("You mustn't write anything after that command");
+                }
+                args = CheckTheCorrect.arrayToDesiredSize(args, 2);
+                System.out.println("Write the login pls");
+                args[0] = CheckTheCorrect.checkTheCorrect("");
+                System.out.println("Write the password pls");
+                args[1] = CheckTheCorrect.checkTheCorrect("");
         }
         return args;
     }

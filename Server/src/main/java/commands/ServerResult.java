@@ -12,7 +12,10 @@ public class ServerResult extends Result{
         super(command);
         dataServer = new DataServer(getMessage());
     }
-
+    public ServerResult(ArrayList<String> message,boolean command,boolean status){
+        super(message, command);
+        dataServer = new DataServer(getMessage(),status);
+    }
     public ServerResult(ArrayList<String> message, boolean command) {
         super(message, command);
         dataServer = new DataServer(getMessage());

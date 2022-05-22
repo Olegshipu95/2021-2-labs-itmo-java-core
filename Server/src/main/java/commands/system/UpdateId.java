@@ -5,10 +5,14 @@ package commands.system;
 import collections.IdCollection;
 import collections.StackCollection;
 import commands.*;
+import connect.ConnectToDataBase;
 import entities.HumanBeing;
 
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
@@ -46,8 +50,17 @@ public class UpdateId extends CommandsToCollection {
         }
 
         StackCollection.entitiesCollection = clone;
-        WriteTheValues.createObject(arguments);
+        try {
+            Connection connection = ConnectToDataBase.getConnection();
+            String request = "select * from logins where id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(request);
+            preparedStatement.setString(1, id+"");
+            preparedStatement.execute();
+            HumanBeing humanBeing = WriteTheValues.createObject(arguments);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ServerResult(false);
+        }
         return new ServerResult(true);
-
     }
 }

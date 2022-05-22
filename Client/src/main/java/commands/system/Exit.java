@@ -4,6 +4,7 @@ package commands.system;
 import clientServer.ConnectWithServer;
 import collections.CommandCollection;
 import commands.*;
+import exceptions.IncorrectArgsException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +15,12 @@ public class Exit extends CommandsToCollection {
     }
 
     public Result function(String ... args) {
+        try {
+            checkTypeArgs(args);
+        } catch (IncorrectArgsException e) {
+            e.getMessage();
+            return new Result(false);
+        }
         DataClients dataClients = new DataClients("save",args);
         ArrayList<String> arrayList = new ArrayList<>();
         try {

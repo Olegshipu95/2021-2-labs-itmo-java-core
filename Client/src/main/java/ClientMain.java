@@ -1,5 +1,6 @@
 
 import clientServer.ConnectWithServer;
+import clientServer.UsersLogin;
 import collections.CommandCollection;
 import collections.HistoryCollection;
 import commands.*;
@@ -46,25 +47,37 @@ public class ClientMain {
             arguments = strArgs.split(",");
             //Check if command contains in client's module
             if (CommandCollection.getClientCommands().containsKey(command)) {
-
-
                 try {
-                    result = (CommandCollection.getCommandColl().get(command)).function(arguments);
+                    result = (CommandCollection.getClientCommands().get(command)).function(arguments);
                 } catch (NullPointerException e) {
+                    System.out.println("Null");
                     continue;
                 }
-
                 for (int i = 0; i < result.getMessage().size(); i++) {
                     System.out.println(result.getMessage().get(i));
                 }
                 HistoryCollection.capacity(command);
 
-            } else if (!CommandCollection.getServerCommands().containsKey(command)) {
-                System.out.println("This command is not in the program, please enter the command again");
-            } else {
+            } else if (CommandCollection.getLoginCommands().containsKey(command) && UsersLogin.getName() == null) {
+                try {
+                    result = (CommandCollection.getLoginCommands().get(command)).function(arguments);
+                } catch (NullPointerException e) {
+                    System.out.println("Null");
+                    continue;
+                }
+                for (int i = 0; i < result.getMessage().size(); i++) {
+                    System.out.println(result.getMessage().get(i));
+                }
+                HistoryCollection.capacity(command);
+            } else if (CommandCollection.getLoginCommands().containsKey(command) && UsersLogin.getName() != null) {
+                System.out.println("You are already logged in");
+            } else if (CommandCollection.getServerCommands().containsKey(command) && UsersLogin.getName() == null) {
+                System.out.println("You haven't been logged in");
+            } else if (!CommandCollection.getServerCommands().containsKey(command))
+                System.out.println("The command is not in the program");
+            else {
                 try {
                     arguments = ArgsValidator.argsValidator(CommandCollection.getServerCommands().get(command).getCommandArgs(), arguments);
-
                     DataServer dataServer = ConnectWithServer.getInstance().connectWithServer(new DataClients(command, arguments));
                     for (String s : dataServer.getMessage()) {
                         System.out.println(s);

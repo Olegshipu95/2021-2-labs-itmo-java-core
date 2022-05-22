@@ -1,13 +1,9 @@
-
-package commands.system;
+package commands.onlyServers;
 
 import collections.JavaIO;
 import collections.StackCollection;
 import commands.*;
 import entities.HumanBeing;
-
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
 

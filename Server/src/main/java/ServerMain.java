@@ -4,10 +4,9 @@ import collections.InfoFail;
 import collections.JavaIO;
 import commands.DataClients;
 import commands.DataServer;
-import commands.Result;
 import commands.ServerResult;
-import commands.system.Add;
 import connect.ConnectWithClient;
+import connect.ConnectToDataBase;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -16,14 +15,13 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.regex.PatternSyntaxException;
 
 public class ServerMain {
     public static final int PORT = 8080;
 
 
     public static void main(String[] args) throws IOException {
+        ConnectToDataBase.connect();
         CommandCollection.commandManager();
         InfoFail.readFile();
         JavaIO.CSVCreateObject();
@@ -87,9 +85,7 @@ public class ServerMain {
                             continue;
                         }
                     } else {
-
                         try {
-
                             ConnectWithClient.sendToClient(result.getDataServer(), ds, senderAddress, senderPort);
                             System.out.println("Command " + command + " has successfully done ");
                         } catch (IOException ex) {

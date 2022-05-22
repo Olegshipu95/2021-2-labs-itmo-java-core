@@ -7,6 +7,7 @@ import commands.AbstractCommand;
 import commands.CommandArgs;
 import commands.CommandsToCollection;
 import commands.Result;
+import exceptions.IncorrectArgsException;
 
 import java.util.ArrayList;
 
@@ -16,9 +17,13 @@ public class History extends CommandsToCollection {
     }
 
     public Result function(String ... args) {
-
-
-            System.out.println(HistoryCollection.historyCollectrion);
+        try {
+            checkTypeArgs(args);
+        } catch (IncorrectArgsException e) {
+            e.getMessage();
+            return new Result(false);
+        }
+        System.out.println(HistoryCollection.historyCollectrion);
         return new Result(true);
 
     }

@@ -2,39 +2,53 @@ package commands;//
 
 import collections.IdCollection;
 import collections.StackCollection;
+import connect.ConnectToDataBase;
 import entities.*;
 import org.apache.commons.csv.CSVRecord;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 
 public class WriteTheValues {
 
-    public static boolean createObject(String[] args)  {
+    public static HumanBeing createObject(String[] args) throws SQLException {
+        Connection connection = ConnectToDataBase.getConnection();
         Mood mood = null;
         WeaponType weaponType = null;
-        try {
-            int id = Integer.valueOf(args[0]);
-            String name = String.valueOf(args[1]);
-            Float x = Float.valueOf(args[2]);
-            Integer y = Integer.valueOf(args[3]);
-            boolean realHero = Boolean.valueOf(args[4]);
-            boolean hasToothpick = Boolean.valueOf(args[5]);
-            Float impactSpeed = Float.valueOf(args[6]);
-            Integer minutesOfWait = Integer.valueOf(args[7]);
-            weaponType = WeaponType.valueOf(args[8]);
-            mood = Mood.valueOf(args[9]);
-            boolean cool = Boolean.valueOf(args[10]);
-
-
-            StackCollection.entitiesCollection.push(new HumanBeing(id, name, new Coordinates(x, y), realHero, hasToothpick, impactSpeed, minutesOfWait, weaponType, mood, new Car(cool)));
-            return true;
-        }
-        catch (NumberFormatException|ArrayIndexOutOfBoundsException e){
-            System.out.println("Incorrect number(or type) of args");
-            return false;
-        }
+        int id = Integer.valueOf(args[0]);
+        String name = String.valueOf(args[1]);
+        Float x = Float.valueOf(args[2]);
+        Integer y = Integer.valueOf(args[3]);
+        boolean realHero = Boolean.valueOf(args[4]);
+        boolean hasToothpick = Boolean.valueOf(args[5]);
+        Float impactSpeed = Float.valueOf(args[6]);
+        Integer minutesOfWait = Integer.valueOf(args[7]);
+        weaponType = WeaponType.valueOf(args[8]);
+        mood = Mood.valueOf(args[9]);
+        boolean cool = Boolean.valueOf(args[10]);
+        String request = "INSERT INTO \"humanBeing  \" VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(request);
+        preparedStatement.setString(1, args[0]);
+        preparedStatement.setString(2, args[1]);
+        preparedStatement.setString(3, LocalDateTime.now().toString());
+        preparedStatement.setString(4, args[2]);
+        preparedStatement.setString(5, args[3]);
+        preparedStatement.setString(6, args[4]);
+        preparedStatement.setString(7, args[5]);
+        preparedStatement.setString(8, args[6]);
+        preparedStatement.setString(9, args[7]);
+        preparedStatement.setString(10, args[8]);
+        preparedStatement.setString(11,args[9]);
+        preparedStatement.setString(12,args[10]);
+        preparedStatement.execute();
+        return new HumanBeing(id, name, new Coordinates(x, y), realHero, hasToothpick, impactSpeed, minutesOfWait, weaponType, mood, new Car(cool));
+//            StackCollection.entitiesCollection.push();
+//            return true;
     }
+
     public static boolean createObject(CSVRecord arguments) {
         Mood mood = null;
         WeaponType weaponType = null;
