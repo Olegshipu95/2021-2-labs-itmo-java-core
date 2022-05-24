@@ -7,4 +7,7 @@ public class UsersLogin {
     @Getter
     @Setter
     private static String name;//нет защиты при отправке на сервер
+    @Getter
+    @Setter
+    private static String password;
 }

@@ -15,7 +15,7 @@ public class SumOfMinutesOfWaiting extends CommandsToCollection {
         super("sumOfMinutesOfWaiting", CommandArgs.NO_ARGS, "print the sum of the values of the minutes Of Waiting field for all elements of the collection");
     }
 
-    public ServerResult function(String ... arguments) {
+    public ServerResult function(DataForArray dataForArray) {
 
         try {
             Long sum = 0L;

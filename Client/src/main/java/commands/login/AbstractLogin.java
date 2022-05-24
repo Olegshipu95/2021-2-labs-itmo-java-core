@@ -20,9 +20,10 @@ public abstract class AbstractLogin extends AbstractCommand {
         return ArgsValidator.argsValidator(getData().getCommandArgs(),args);
     }
     @Override
-    public Result function(String... args) {
+    public Result function(DataForArray dataForArray) {
+        String[] args;
         try{
-            args = checkTypeArgs(args);
+            args = checkTypeArgs(dataForArray.getArgs());
         } catch (IncorrectArgsException e) {
             e.getMessage();
             return new Result(false);
@@ -32,6 +33,7 @@ public abstract class AbstractLogin extends AbstractCommand {
             DataServer dataServer = ConnectWithServer.getInstance().connectWithServer(dataClients);
             if(dataServer.isStatus()) {
                 UsersLogin.setName(args[0]);
+                UsersLogin.setPassword(args[1]);
                 return new Result(true);
             }
             else{

@@ -3,17 +3,18 @@ package commands.onlyServers;
 import collections.JavaIO;
 import collections.StackCollection;
 import commands.*;
+import connect.OnlyServersCommands;
 import entities.HumanBeing;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Save extends CommandsToCollection {
+public class Save extends OnlyServersCommands {
     public Save() {
         super("save", CommandArgs.NO_ARGS, "save the collection to a file");
 
     }
 
-    public ServerResult function(String ... arguments) {
+    public ServerResult function(DataForArray dataForArray) {
 
         try {
             Iterator iterator = StackCollection.entitiesCollection.iterator();

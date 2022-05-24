@@ -11,20 +11,24 @@ public class DataClients implements Serializable {
     @Getter
     private final String command;
     @Getter
-    private final String[] args;
+    private String[] args;
     @Getter
-    private final String usersName;
+    private final String name;
+    @Getter
+    private final String password;
 
-    public DataClients(String command, String[] args, String usersName) {
+    public DataClients(String command, String[] args, String usersName,String password) {
         this.command = command;
         this.args = args;
-        this.usersName = usersName;
+        this.name = usersName;
+        this.password = password;
     }
 
     public DataClients(String commandWithArgs, String[] args) {
         command = commandWithArgs;
         this.args = args;
-        usersName = null;
+        name = null;
+        password = null;
     }
 
 

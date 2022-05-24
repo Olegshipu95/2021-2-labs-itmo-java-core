@@ -17,7 +17,7 @@ public class AverageOfMinutesOfWaiting extends CommandsToCollection {
         super("averageOfMinutes", NO_ARGS, "output the average value of the minutes Of Waiting field for all items in the collection");
     }
 
-    public ServerResult function(String ... arguments) {
+    public ServerResult function(DataForArray dataForArray) {
 
         try {
             Long sum = 0L;

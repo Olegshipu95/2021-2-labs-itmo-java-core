@@ -2,9 +2,7 @@
 import collections.CommandCollection;
 import collections.InfoFail;
 import collections.JavaIO;
-import commands.DataClients;
-import commands.DataServer;
-import commands.ServerResult;
+import commands.*;
 import connect.ConnectWithClient;
 import connect.ConnectToDataBase;
 
@@ -24,7 +22,7 @@ public class ServerMain {
         ConnectToDataBase.connect();
         CommandCollection.commandManager();
         InfoFail.readFile();
-        JavaIO.CSVCreateObject();
+        WriteTheValues.addObjectsFromDB();
         System.out.println("Server is working");
         /*
         после коннекта юзера будет
@@ -69,9 +67,24 @@ public class ServerMain {
                     } catch (IOException e) {
                         System.out.println("User closed the connection");
                     }
-                } else {
-                    String[] arguments = obj.getArgs();
-                    ServerResult result =(ServerResult) CommandCollection.getInstance().getServerCollection().get(command).function(arguments);
+                }
+                else {
+                    if((obj.getName()==null || obj.getPassword() == null) && !CommandCollection.getInstance().getOnlyServers().contains(command)){
+                        ArrayList<String> message = new ArrayList<>();
+                        System.out.println("user hasn't logged in ");
+                        message.add("user hasn't logged in ");
+                        ConnectWithClient.sendToClient(new DataServer(message), ds, senderAddress, senderPort);
+                        continue;
+                    }
+                    if(!CommandCollection.getInstance().getOnlyServers().contains(command)&& !ConnectToDataBase.login(obj.getName(), obj.getPassword())){
+                        ArrayList<String> message = new ArrayList<>();
+                        System.out.println("Your account is invalid");
+                        message.add("Your account is invalid");
+                        ConnectWithClient.sendToClient(new DataServer(message), ds, senderAddress, senderPort);
+                        continue;
+                    }
+                    DataForArray dataForArray = new DataForArray(obj.getArgs(), obj.getName(), obj.getPassword());
+                    ServerResult result =(ServerResult) CommandCollection.getInstance().getServerCollection().get(command).function(dataForArray);
                     if (!result.isCommand()) {
                         try {
                             for (String s:

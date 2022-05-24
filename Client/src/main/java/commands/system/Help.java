@@ -13,9 +13,9 @@ public class Help extends CommandsToCollection {
         super("help", CommandArgs.NO_ARGS, "output help for available commands");
     }
 
-    public Result function(String... args) {
+    public Result function(DataForArray dataForArray) {
         try {
-            checkTypeArgs(args);
+            checkTypeArgs(dataForArray.getArgs());
         } catch (IncorrectArgsException e) {
             e.getMessage();
             return new Result(false);

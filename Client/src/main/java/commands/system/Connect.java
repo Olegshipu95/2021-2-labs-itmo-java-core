@@ -17,10 +17,11 @@ public class Connect extends CommandsToCollection {
     }
 
     @Override
-    public Result function(String... args) {
+    public Result function(DataForArray dataForArray) {
         ArrayList<String> arrayList = new ArrayList<>();
+        String[] args;
         try {
-            args = checkTypeArgs(args);
+            args = checkTypeArgs(dataForArray.getArgs());
         } catch (IncorrectArgsException e) {
             return new Result(false);
         }

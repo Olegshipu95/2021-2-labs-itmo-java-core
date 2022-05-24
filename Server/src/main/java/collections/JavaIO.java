@@ -38,41 +38,4 @@ public class JavaIO {
             }
         }
     }
-
-    public static void CSVCreateObject() {
-        Scanner scanner = new Scanner(System.in);
-        //File file = new File(GetFileFromResources.getInstance().getFilePathToSave("text2.txt"));
-        String relative = (new File("")).getAbsolutePath() + File.separator + "/common/src/main/resources";
-        String child = "text2.txt";
-        new StringBuilder();
-
-        while(true) {
-            try {
-                File path = new File(relative, child);
-                CSVParser parser = CSVParser.parse(path, Charset.defaultCharset(), CSVFormat.RFC4180);
-                List<CSVRecord> parserlocal = parser.getRecords();
-                Iterator iterator = parserlocal.iterator();
-
-                while(iterator.hasNext()) {
-                    CSVRecord record = (CSVRecord)iterator.next();
-                    if (record.size() == 16) {
-                        WriteTheValues.createObject(record);
-                    }
-                }
-
-                return;
-            } catch (IOException e) {
-                System.out.println("There were problems (does not exist or no rights) with the file");
-                System.out.print("Enter the path to the file:");
-                if (!scanner.hasNext()) {
-                    System.exit(0);
-                }
-
-                relative = scanner.nextLine();
-                String[] strings ;
-                strings = relative.split("/");
-                child = strings[strings.length-1];
-            }
-        }
-    }
 }

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.extern.java.Log;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class CommandCollection {
     private static CommandCollection instance;
@@ -22,6 +23,8 @@ public class CommandCollection {
     }
     @Getter
     private HashMap<String, AbstractCommand> serverCollection = new HashMap();
+    @Getter
+    HashSet<String> onlyServers = new HashSet<>();
 
     public synchronized static void commandManager() {
         new Connect();

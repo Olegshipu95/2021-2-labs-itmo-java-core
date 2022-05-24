@@ -21,6 +21,7 @@ public class ClientMain {
             String command;
             String[] arguments;
             String strArgs;
+            DataForArray dataForArray;
             System.out.print("Please enter the command: ");
             if (!scanner.hasNext()) {
                 System.out.println("Wrong input, forced shutdown");
@@ -45,10 +46,11 @@ public class ClientMain {
                 strArgs = "";
             }
             arguments = strArgs.split(",");
+            dataForArray = new DataForArray(arguments);
             //Check if command contains in client's module
             if (CommandCollection.getClientCommands().containsKey(command)) {
                 try {
-                    result = (CommandCollection.getClientCommands().get(command)).function(arguments);
+                    result = (CommandCollection.getClientCommands().get(command)).function(dataForArray);
                 } catch (NullPointerException e) {
                     System.out.println("Null");
                     continue;
@@ -60,7 +62,7 @@ public class ClientMain {
 
             } else if (CommandCollection.getLoginCommands().containsKey(command) && UsersLogin.getName() == null) {
                 try {
-                    result = (CommandCollection.getLoginCommands().get(command)).function(arguments);
+                    result = (CommandCollection.getLoginCommands().get(command)).function(dataForArray);
                 } catch (NullPointerException e) {
                     System.out.println("Null");
                     continue;
@@ -78,7 +80,7 @@ public class ClientMain {
             else {
                 try {
                     arguments = ArgsValidator.argsValidator(CommandCollection.getServerCommands().get(command).getCommandArgs(), arguments);
-                    DataServer dataServer = ConnectWithServer.getInstance().connectWithServer(new DataClients(command, arguments));
+                    DataServer dataServer = ConnectWithServer.getInstance().connectWithServer(new DataClients(command, arguments,UsersLogin.getName(),UsersLogin.getPassword()));
                     for (String s : dataServer.getMessage()) {
                         System.out.println(s);
                     }

@@ -13,54 +13,40 @@ import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Stack;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class UpdateId extends CommandsToCollection {
     public UpdateId() {
-        super("updateId", CommandArgs.FILLING_ALL_ARGS, "update the value of a collection item whose id is equal to the specified one. You need write: \n   string name,float x,Integer y,boolean realhero,boolean hasToothpick,Float impactSpeed,\n   Integer minutesOfWaiting,WeaponType weaponType,Mood mood,boolean bool");
+        super("updateId", CommandArgs.FILLING_ALL_ARGS, "update the value of a collection item whose id is equal to the specified one.");
     }
 
 
-    public ServerResult function(String... arguments) {
+    public ServerResult function(DataForArray dataForArray) {
         if (StackCollection.entitiesCollection.isEmpty()) {
             System.out.println("Collection has no items");
             ArrayList<String> arrayList = new ArrayList<>();
             arrayList.add("Collection has no items");
             return new ServerResult(arrayList, false);
         }
-
-        String[] local = arguments;
+        String[] arguments = dataForArray.getArgs();
         int id;
         id = Integer.parseInt(arguments[0]);
-        if (!IdCollection.idCollection.contains(id)) {
+        List<HumanBeing> list = StackCollection.getEntitiesCollection().stream().filter(x -> x.getId() == id).collect(Collectors.toCollection(ArrayList::new));
+        if (list.isEmpty()) {
             System.out.println("Data is incorrect(id doesn't contains in IdCollection), write the command again ");
             ArrayList<String> arrayList = new ArrayList<>();
             arrayList.add("Data is incorrect(id doesn't contains in IdCollection), write the command again ");
             return new ServerResult(arrayList, false);
         }
 
-        Stack clone = new Stack();
-        while (StackCollection.entitiesCollection.size() > 0) {
-            HumanBeing lol;
-            if ((lol = (HumanBeing) StackCollection.entitiesCollection.pop()).getId() != id) {
-                clone.push(lol);
-            }
-        }
-
-        StackCollection.entitiesCollection = clone;
         try {
-            Connection connection = ConnectToDataBase.getConnection();
-            String request = "select * from logins where id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(request);
-            preparedStatement.setString(1, id+"");
-            preparedStatement.execute();
-            HumanBeing humanBeing = WriteTheValues.createObject(arguments);
+            HumanBeing humanBeing = WriteTheValues.updateObject(arguments);
+            Collections.replaceAll(StackCollection.getEntitiesCollection(), list.get(0), humanBeing);
+            return new ServerResult(true);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Problem is SQL");
             return new ServerResult(false);
         }
-        return new ServerResult(true);
     }
 }

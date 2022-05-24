@@ -44,12 +44,12 @@ public class JavaIO {
                 strArgs = "";
             }
             arguments = strArgs.split(",");
+            DataForArray dataForArray = new DataForArray(arguments);
             System.out.println("Command : " + command);
             //Check if command contains in client's module
             if (CommandCollection.getClientCommands().containsKey(command)) {
 
-
-                result = (CommandCollection.getClientCommands().get(command)).function(arguments);
+                result = (CommandCollection.getClientCommands().get(command)).function(dataForArray);
 
                 for (int i = 0; i < result.getMessage().size(); i++) {
                     System.out.println(result.getMessage().get(i));

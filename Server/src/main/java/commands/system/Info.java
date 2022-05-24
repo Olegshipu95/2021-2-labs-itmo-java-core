@@ -15,7 +15,7 @@ public class Info extends CommandsToCollection {
         super("info", CommandArgs.NO_ARGS, "output information about the collection (type, initialization date, number of items, etc.) to the standard output stream.");
     }
 
-    public ServerResult function(String ... args) {
+    public ServerResult function(DataForArray dataForArray) {
         try {
             ArrayList<String> arrayList = new ArrayList<>();
             arrayList.add(InfoFail.infoCol(StackCollection.entitiesCollection.size()));

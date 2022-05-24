@@ -14,14 +14,14 @@ public class Exit extends CommandsToCollection {
         super("exit", CommandArgs.NO_ARGS, "terminate the program (without saving to a file)");
     }
 
-    public Result function(String ... args) {
+    public Result function(DataForArray dataForArray) {
         try {
-            checkTypeArgs(args);
+            checkTypeArgs(dataForArray.getArgs());
         } catch (IncorrectArgsException e) {
             e.getMessage();
             return new Result(false);
         }
-        DataClients dataClients = new DataClients("save",args);
+        DataClients dataClients = new DataClients("save", dataForArray.getArgs());
         ArrayList<String> arrayList = new ArrayList<>();
         try {
             DataServer dataServer = ConnectWithServer.getInstance().connectWithServer(dataClients);

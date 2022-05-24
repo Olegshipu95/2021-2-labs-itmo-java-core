@@ -13,14 +13,15 @@ import java.util.Arrays;
 
 public class Add extends CommandsToCollection {
     public Add() {
-        super("add", CommandArgs.FILLING_ALL_ARGS_WITHOUT_ID,"add a new item to the collection.You should write:\n   string name,float x,Integer y,boolean realhero,boolean hasToothpick,Float impactSpeed,\n   Integer minutesOfWaiting,WeaponType weaponType,Mood mood,boolean bool" );
+        super("add", CommandArgs.FILLING_ALL_ARGS_WITHOUT_ID,"add a new item to the collection." );
     }
-    public ServerResult function(String ... arguments) {
+    public ServerResult function(DataForArray dataForArray) {
         try {
-            HumanBeing humanBeing = WriteTheValues.createObject(arguments);
+            HumanBeing humanBeing = WriteTheValues.createObject(dataForArray);
             StackCollection.getEntitiesCollection().push(humanBeing);
             return new ServerResult(true);
         } catch (SQLException e) {
+            e.printStackTrace();
             e.getMessage();
             return new ServerResult(false);
         }

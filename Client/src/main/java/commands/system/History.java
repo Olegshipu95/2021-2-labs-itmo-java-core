@@ -3,10 +3,7 @@
 package commands.system;
 
 import collections.HistoryCollection;
-import commands.AbstractCommand;
-import commands.CommandArgs;
-import commands.CommandsToCollection;
-import commands.Result;
+import commands.*;
 import exceptions.IncorrectArgsException;
 
 import java.util.ArrayList;
@@ -16,9 +13,9 @@ public class History extends CommandsToCollection {
         super("history", CommandArgs.NO_ARGS, "output the last 14 commands (without their arguments)");
     }
 
-    public Result function(String ... args) {
+    public Result function(DataForArray dataForArray) {
         try {
-            checkTypeArgs(args);
+            checkTypeArgs(dataForArray.getArgs());
         } catch (IncorrectArgsException e) {
             e.getMessage();
             return new Result(false);

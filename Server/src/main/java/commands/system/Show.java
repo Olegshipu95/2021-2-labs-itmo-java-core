@@ -15,7 +15,7 @@ public class Show extends CommandsToCollection {
         super("show", CommandArgs.NO_ARGS, "output to the standard output stream all the elements of the collection in a string representation");
     }
 
-    public ServerResult function(String ... arguments) {
+    public ServerResult function(DataForArray dataForArray) {
 
         try {
             ArrayList<String> arrayList = new ArrayList<>();

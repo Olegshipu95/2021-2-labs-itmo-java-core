@@ -9,6 +9,7 @@ import static commands.CommandArgs.*;
 
 public class ArgsValidator {
     public static String[] argsValidator(CommandArgs typeOfArgs, String[] args) throws IncorrectArgsException {
+        String[] argsLocal;
         switch (typeOfArgs) {
             case NO_ARGS:
                 if (!(args.length == 1 && args[0].isEmpty())) {
@@ -16,13 +17,14 @@ public class ArgsValidator {
                 }
                 break;
             case ID_ARGS:
-                System.out.println(args.length);
                 if (args.length != 1) {
                     throw new IncorrectArgsException("The number of arguments must be 1");
-                } else {
+                }
+                else {
                     try {
                         Integer.valueOf(args[0]);
                     } catch (NumberFormatException e) {
+                        System.out.println("Write id pls");
                         CheckTheCorrect.checkTheCorrect(Integer.valueOf(0));
                     }
                 }
@@ -36,8 +38,8 @@ public class ArgsValidator {
                     args[i + 1] = local;
                     local = local2;
                 }
-                args[0] = IdCollection.createId().toString();
-                String[] argsLocal = CheckTheCorrect.fillingArgs(Arrays.copyOfRange(args, 1, args.length));
+                args[0] =  Integer.toString((int)(Math.random() * 1000000));
+                argsLocal = CheckTheCorrect.fillingArgs(Arrays.copyOfRange(args, 1, args.length));
                 for (int i = 1; i < argsLocal.length; i++) {
                     args[i] = argsLocal[i-1];
                 }
@@ -50,7 +52,10 @@ public class ArgsValidator {
                     System.out.print("Write Id pls: ");
                     args[0] = CheckTheCorrect.checkTheCorrect(Integer.valueOf(0)).toString();
                 }
-                args = CheckTheCorrect.fillingArgs(Arrays.copyOfRange(args, 1, args.length));
+                argsLocal = CheckTheCorrect.fillingArgs(Arrays.copyOfRange(args, 1, args.length));
+                for (int i = 1; i < argsLocal.length; i++) {
+                    args[i] = argsLocal[i-1];
+                }
                 break;
             case CONNECT_ARGS:
                 if (args.length != 2) {

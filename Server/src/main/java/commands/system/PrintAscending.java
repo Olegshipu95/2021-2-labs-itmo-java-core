@@ -17,7 +17,7 @@ public class PrintAscending extends CommandsToCollection {
         super("printAscending", CommandArgs.NO_ARGS, "output the elements of the collection in ascending order");
     }
 
-    public ServerResult function(String ... args) {
+    public ServerResult function(DataForArray dataForArray) {
         ArrayList<String> arrayList = new ArrayList<>();
         try {
 
