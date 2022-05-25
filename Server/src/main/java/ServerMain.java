@@ -5,6 +5,7 @@ import collections.JavaIO;
 import commands.*;
 import connect.ConnectWithClient;
 import connect.ConnectToDataBase;
+import connect.RequestHandler;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.concurrent.*;
 
 public class ServerMain {
     public static final int PORT = 8080;
@@ -22,6 +24,9 @@ public class ServerMain {
         ConnectToDataBase.connect();
         CommandCollection.commandManager();
         InfoFail.readFile();
+        ExecutorService service = Executors.newFixedThreadPool(5);
+        ExecutorService commandHandler = ForkJoinPool.commonPool();
+
         WriteTheValues.addObjectsFromDB();
         System.out.println("Server is working");
         /*
@@ -32,81 +37,36 @@ public class ServerMain {
             DatagramPacket outputPacket;
             int len = arr.length;
             DatagramSocket ds;
-            DatagramPacket inputPacket;
+            DatagramPacket inputPacket = new DatagramPacket(arr, len);
             ds = new DatagramSocket(PORT);
             String outputLine;
-            inputPacket = new DatagramPacket(arr, len);
-
             while (true) {
+
                 System.out.println("Waiting for a client to connect...");
-                ds.receive(inputPacket);
-                // Выведите на экран отправленные клиентом данные
-                byte[] byteMessage = inputPacket.getData();
-                DataClients obj = null;
-                InetAddress senderAddress = inputPacket.getAddress();
-                int senderPort = inputPacket.getPort();
+                DatagramPacket datagramPacket = new DatagramPacket(arr, len);
+                Callable<DatagramPacket> callable = ()->{try {
+                    ds.receive(datagramPacket);
+                    return datagramPacket;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }};
+                Future<DatagramPacket> future = service.submit(callable);
                 try {
-                    ObjectInputStream inputStream = new ObjectInputStream(new ByteArrayInputStream(byteMessage));
-                    obj = (DataClients) inputStream.readObject();
-                } catch (ClassNotFoundException e) {
-                    System.out.println("Error!Server does not see the object ");
-                    ArrayList<String> message = new ArrayList<>();
-                    message.add("Error!Server does not see the object ");
-                    ConnectWithClient.sendToClient(new DataServer(message), ds, senderAddress, senderPort);
-                    continue;
+                    inputPacket = future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
                 }
-                String command = obj.getCommand();
-                System.out.println("Sent command from client is:" + command);
-                if (!CommandCollection.getInstance().getServerCollection().containsKey(command)) {
+                DatagramPacket data = inputPacket;
+                //
+                Runnable col = ()-> {
                     try {
-                        ArrayList<String> message = new ArrayList<>();
-                        System.out.println("Error!There is not command ");
-                        message.add("Error!There is not command " + command);
-                        ConnectWithClient.sendToClient(new DataServer(message), ds, senderAddress, senderPort);
-                        continue;
-                    } catch (IOException e) {
-                        System.out.println("User closed the connection");
+                        new RequestHandler(ds,data).call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                }
-                else {
-                    if((obj.getName()==null || obj.getPassword() == null) && !CommandCollection.getInstance().getOnlyServers().contains(command)){
-                        ArrayList<String> message = new ArrayList<>();
-                        System.out.println("user hasn't logged in ");
-                        message.add("user hasn't logged in ");
-                        ConnectWithClient.sendToClient(new DataServer(message), ds, senderAddress, senderPort);
-                        continue;
-                    }
-                    if(!CommandCollection.getInstance().getOnlyServers().contains(command)&& !ConnectToDataBase.login(obj.getName(), obj.getPassword())){
-                        ArrayList<String> message = new ArrayList<>();
-                        System.out.println("Your account is invalid");
-                        message.add("Your account is invalid");
-                        ConnectWithClient.sendToClient(new DataServer(message), ds, senderAddress, senderPort);
-                        continue;
-                    }
-                    DataForArray dataForArray = new DataForArray(obj.getArgs(), obj.getName(), obj.getPassword());
-                    ServerResult result =(ServerResult) CommandCollection.getInstance().getServerCollection().get(command).function(dataForArray);
-                    if (!result.isCommand()) {
-                        try {
-                            for (String s:
-                                 result.getMessage()) {
-                                System.out.println(s);
-                            }
-                            ConnectWithClient.sendToClient(result.getDataServer(), ds, senderAddress, senderPort);
-                            continue;
-                        } catch (IOException e) {
-                            System.out.println("Trouble with client");
-                            continue;
-                        }
-                    } else {
-                        try {
-                            ConnectWithClient.sendToClient(result.getDataServer(), ds, senderAddress, senderPort);
-                            System.out.println("Command " + command + " has successfully done ");
-                        } catch (IOException ex) {
-                            System.out.println("Trouble with client");
-                            continue;
-                        }
-                    }
-                }
+                };
+                commandHandler.execute(col);
             }
     }
 }
