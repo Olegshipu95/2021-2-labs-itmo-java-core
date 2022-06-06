@@ -7,8 +7,12 @@ import entities.HumanBeing;
 
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Show extends CommandsToCollection {
     public Show() {
@@ -16,8 +20,10 @@ public class Show extends CommandsToCollection {
     }
 
     public ServerResult function(DataForArray dataForArray) {
-
+        Lock readLock = new ReentrantReadWriteLock().readLock();
+        readLock.lock();
         try {
+
             ArrayList<String> arrayList = new ArrayList<>();
             Stack clone = new Stack();
             while(StackCollection.entitiesCollection.size() > 0) {
@@ -31,6 +37,9 @@ public class Show extends CommandsToCollection {
             return new ServerResult(arrayList,true);
         } catch (Exception e) {
             return new ServerResult(false);
+        }
+        finally {
+            readLock.unlock();
         }
     }
 

@@ -44,7 +44,7 @@ public class InfoFail {
         info = line.toString();
     }
 
-    public static String infoCol(int x) {
+    public static String    infoCol(int x) {
         StringBuilder line = new StringBuilder(info);
         line.append("Collection length:" + x);
         return line.toString().trim();

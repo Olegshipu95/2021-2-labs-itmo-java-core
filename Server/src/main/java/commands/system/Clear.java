@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
 import static commands.CommandArgs.NO_ARGS;
@@ -26,7 +28,8 @@ public class Clear extends CommandsToCollection {
     }
 
     public ServerResult function(DataForArray dataForArray) {
-
+        Lock writeLock = new ReentrantReadWriteLock().writeLock();
+        writeLock.lock();
         try {
             Connection connection = ConnectToDataBase.getConnection();
             String request = "select id from objects where login = ?";
@@ -49,6 +52,9 @@ public class Clear extends CommandsToCollection {
         } catch (Exception e) {
             e.printStackTrace();
             return new ServerResult(false);
+        }
+        finally {
+            writeLock.unlock();
         }
     }
 }

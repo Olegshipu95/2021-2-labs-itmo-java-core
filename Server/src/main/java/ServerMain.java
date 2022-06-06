@@ -19,7 +19,6 @@ import java.util.concurrent.*;
 public class ServerMain {
     public static final int PORT = 8080;
 
-
     public static void main(String[] args) throws IOException {
         ConnectToDataBase.connect();
         CommandCollection.commandManager();

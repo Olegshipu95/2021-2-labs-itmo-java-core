@@ -15,7 +15,7 @@ import java.util.HashSet;
 public class CommandCollection {
     private static CommandCollection instance;
     private CommandCollection(){}
-    public static synchronized CommandCollection getInstance(){
+    public static CommandCollection getInstance(){
         if(instance == null){		//если объект еще не создан
             instance = new CommandCollection();	//создать новый объект
         }
@@ -26,7 +26,7 @@ public class CommandCollection {
     @Getter
     HashSet<String> onlyServers = new HashSet<>();
 
-    public synchronized static void commandManager() {
+    public static void commandManager() {
         new Connect();
         new Add();
         new AverageOfMinutesOfWaiting();
