@@ -3,14 +3,12 @@ package connect;
 import commands.ServerResult;
 import lombok.Getter;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class ConnectToDataBase {
@@ -21,15 +19,23 @@ public class ConnectToDataBase {
     private static Connection connection;
 
     public static void connect() {
+        Properties property = new Properties();
         Scanner scanner = new Scanner(System.in);
         System.out.print("Write the path of script: ");
         while (scanner.hasNext()) {
             String filePath = scanner.nextLine();
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)))) {
-                url = reader.readLine();
-                username = reader.readLine();
-                password = reader.readLine();
-            } catch (IOException e) {
+//            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)))) {
+//                url = reader.readLine();
+//                username = reader.readLine();
+//                password = reader.readLine();
+//            }
+
+            try (InputStream inputStream = ConnectToDataBase.class.getClassLoader().getResourceAsStream(filePath)) {
+                property.load(inputStream);
+                url = property.getProperty("jdbc_url");
+                username = property.getProperty("db_user");
+                password = property.getProperty("db_password");}
+            catch (IOException|NullPointerException e) {
                 System.out.println("File is unreadable, write the path again pls");
             }
             try {
