@@ -3,10 +3,12 @@ package entities;
 import collections.IdCollection;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @EqualsAndHashCode(of = {"id" , "name"})
 public class HumanBeing {
     public HumanBeing(int id,String name, Coordinates coordinates, boolean realHero,

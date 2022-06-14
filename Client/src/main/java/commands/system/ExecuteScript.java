@@ -4,10 +4,7 @@ package commands.system;
 import clientServer.ConnectWithServer;
 import collections.ExecuteFileCollection;
 import collections.JavaIO;
-import commands.AbstractCommand;
-import commands.CommandArgs;
-import commands.CommandsToCollection;
-import commands.Result;
+import commands.*;
 
 import java.util.ArrayList;
 
@@ -16,13 +13,13 @@ public class ExecuteScript extends CommandsToCollection {
         super("execute_script", CommandArgs.STRING, "read and execute the script from the specified file. The script contains commands in the same form in which they are entered by the user in interactive mode.");
     }
 
-    public Result function(String ... arguments) {
+    public Result function(DataForArray dataForArray) {
         if(ConnectWithServer.getInstance().getIPAddress()==null){
             System.out.println("You must write \"connect\" before using this command");
             return new Result(false);
         }
 
-        String filepath = arguments[0];
+        String filepath = dataForArray.getArgs()[0];
 
         try {
             if (ExecuteFileCollection.getExecuteFileCollection().contains(filepath)) {

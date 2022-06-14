@@ -15,15 +15,24 @@ public class DataServer implements Serializable {
     private ArrayList<String> message;
     @Getter
     private HashSet<CommandData> commandDataHashSet;
-    public DataServer(HashSet<CommandData> hashSet,ArrayList<String> message){
+    @Getter
+    private boolean status;
+
+    public DataServer(ArrayList<String> message, boolean status) {
+        this.message = message;
+        this.status = status;
+    }
+
+    public DataServer(HashSet<CommandData> hashSet, ArrayList<String> message) {
         this.commandDataHashSet = hashSet;
         this.message = message;
     }
-    public DataServer(ArrayList<String> message){
+
+    public DataServer(ArrayList<String> message) {
         this.message = message;
     }
 
-    public byte[] getBytes()  {
+    public byte[] getBytes() {
         byte[] serializedObj = {};
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

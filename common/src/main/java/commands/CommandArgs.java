@@ -7,4 +7,5 @@ public enum CommandArgs {
     FILLING_ALL_ARGS_WITHOUT_ID,
     CONNECT_ARGS,
     STRING,
+    LOGIN_ARGS;
 }

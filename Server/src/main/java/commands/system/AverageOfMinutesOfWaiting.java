@@ -9,6 +9,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static commands.CommandArgs.NO_ARGS;
 
@@ -17,8 +19,9 @@ public class AverageOfMinutesOfWaiting extends CommandsToCollection {
         super("averageOfMinutes", NO_ARGS, "output the average value of the minutes Of Waiting field for all items in the collection");
     }
 
-    public ServerResult function(String ... arguments) {
-
+    public ServerResult function(DataForArray dataForArray) {
+        Lock readLock = new ReentrantReadWriteLock().readLock();
+        readLock.lock();
         try {
             Long sum = 0L;
             int longArray = StackCollection.entitiesCollection.size();
@@ -35,6 +38,9 @@ public class AverageOfMinutesOfWaiting extends CommandsToCollection {
             return new ServerResult(arrayList,true);
         } catch (Exception e) {
             return new ServerResult(false);
+        }
+        finally {
+            readLock.unlock();
         }
     }
 

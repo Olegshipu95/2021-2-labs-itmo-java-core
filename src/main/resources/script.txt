@@ -1,2 +1,0 @@
-add nom,1.5,6,true,false,1.8,18,HAMMER,CALM,false
-show

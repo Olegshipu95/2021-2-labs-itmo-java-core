@@ -17,17 +17,17 @@ public class Connect extends CommandsToCollection {
     }
 
     @Override
-    public Result function(String... args) {
+    public Result function(DataForArray dataForArray) {
         ArrayList<String> arrayList = new ArrayList<>();
+        String[] args;
         try {
-            args = checkTypeArgs(args);
+            args = checkTypeArgs(dataForArray.getArgs());
         } catch (IncorrectArgsException e) {
             return new Result(false);
         }
         try {
             ConnectWithServer.getInstance().setIPAddressAndPort(InetAddress.getByName(args[0]), Integer.valueOf(args[1]));
             DataClients dataClients = new DataClients("connect", args);
-
             DataServer dataServer = ConnectWithServer.getInstance().connectWithServer(dataClients);
             for (CommandData commandData : dataServer.getCommandDataHashSet()) {
                 CommandCollection.getServerCommands().put(commandData.getName(), commandData);

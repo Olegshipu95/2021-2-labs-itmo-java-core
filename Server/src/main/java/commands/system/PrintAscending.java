@@ -11,14 +11,18 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class PrintAscending extends CommandsToCollection {
     public PrintAscending() {
         super("printAscending", CommandArgs.NO_ARGS, "output the elements of the collection in ascending order");
     }
 
-    public ServerResult function(String ... args) {
+    public ServerResult function(DataForArray dataForArray) {
         ArrayList<String> arrayList = new ArrayList<>();
+        Lock readLock = new ReentrantReadWriteLock().readLock();
+        readLock.lock();
         try {
 
             StackCollection.entitiesCollection.sort(new Comparator<HumanBeing>() {
@@ -36,6 +40,9 @@ public class PrintAscending extends CommandsToCollection {
             return new ServerResult(arrayList,true);
         } catch (Exception e) {
             return new ServerResult(false);
+        }
+        finally {
+            readLock.unlock();
         }
     }
 

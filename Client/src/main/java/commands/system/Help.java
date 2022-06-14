@@ -1,28 +1,40 @@
 
 package commands.system;
 
+import clientServer.UsersLogin;
 import collections.CommandCollection;
 import commands.*;
+import exceptions.IncorrectArgsException;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public class Help extends CommandsToCollection {
     public Help() {
         super("help", CommandArgs.NO_ARGS, "output help for available commands");
     }
 
-    public Result function(String... args) {
-        System.out.println("|.............Client's commands.............|");
-        for (Entry<String, String> pair : CommandCollection.getClientCommands().entrySet()){
-            String key = (String) pair.getKey();
-            String value = (String) pair.getValue();
-            System.out.println("|| " + key + " --> " + value);
+    public Result function(DataForArray dataForArray) {
+        try {
+            checkTypeArgs(dataForArray.getArgs());
+        } catch (IncorrectArgsException e) {
+            e.getMessage();
+            return new Result(false);
         }
-        if (!CommandCollection.getServerCommands().isEmpty()) {
+        System.out.println("|.............Client's commands.............|");
+        for (Entry<String, AbstractCommand> pair : CommandCollection.getClientCommands().entrySet()){
+            String key =  pair.getKey();
+            AbstractCommand value =  pair.getValue();
+            System.out.println("|| " + key + " --> " + value.getData().getDescription());
+        }
+        if(!CommandCollection.getServerCommands().isEmpty() && UsersLogin.getName()==null){
+            System.out.println("|..............Login's commands.............|");
+            for (Entry<String, AbstractCommand> pair : CommandCollection.getLoginCommands().entrySet()){
+                String key = pair.getKey();
+                AbstractCommand value = pair.getValue();
+                System.out.println("|| " + key + " --> " + value.getData().getDescription());
+            }
+        }
+        if (!CommandCollection.getServerCommands().isEmpty()&& UsersLogin.getName()!=null) {
             System.out.println("|.............Server's commands.............|");
             for (Entry<String, CommandData> pair : CommandCollection.getServerCommands().entrySet()){
                 String key = pair.getKey();

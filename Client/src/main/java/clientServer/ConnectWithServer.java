@@ -64,13 +64,11 @@ public class ConnectWithServer {
         // Отправьте UDP-пакет серверу
         try {
             datagramChannel.send(buf, host2);
-            if(!datagramChannel.isConnected()){
-                System.out.println("Server is not available now");
-                return null;
-            }
+//            if(!datagramChannel.isConnected()){
+//                System.out.println("Server is not available now");
+//                return null;
+//            }
 //            datagramChannel.setSoTimeout(5000);
-        }catch (SocketTimeoutException e){
-            System.out.println("Server is not available now");
         }
         catch (IOException e) {
             System.out.println("Problems with server");

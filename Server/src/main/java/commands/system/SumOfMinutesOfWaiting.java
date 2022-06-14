@@ -9,14 +9,17 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class SumOfMinutesOfWaiting extends CommandsToCollection {
      public SumOfMinutesOfWaiting() {
         super("sumOfMinutesOfWaiting", CommandArgs.NO_ARGS, "print the sum of the values of the minutes Of Waiting field for all elements of the collection");
     }
 
-    public ServerResult function(String ... arguments) {
-
+    public ServerResult function(DataForArray dataForArray) {
+        Lock readLock = new ReentrantReadWriteLock().readLock();
+        readLock.lock();
         try {
             Long sum = 0L;
             Stack clone = new Stack();

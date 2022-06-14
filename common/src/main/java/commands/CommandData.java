@@ -10,7 +10,7 @@ public class CommandData implements Serializable {
     @Getter
     private final CommandArgs commandArgs;
     @Getter
-    private final String description;//Getter instead of Map
+    private final String description;
 
     public CommandData(String name, CommandArgs commandArgs, String description) {
         this.name = name;
