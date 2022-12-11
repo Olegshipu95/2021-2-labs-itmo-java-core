@@ -9,3 +9,4 @@ Lab6:
 Lab7:
 ![image](https://user-images.githubusercontent.com/100952665/206904456-399d2aaf-9d01-446d-902c-5db89769756f.png)
 ![image](https://user-images.githubusercontent.com/100952665/206904467-6def13e8-c6bf-4126-b9cb-503689913726.png)
+В 7 лабе был не реализован нормально ForkJoinPool.
